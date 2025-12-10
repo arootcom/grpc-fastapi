@@ -11,5 +11,7 @@ services:
       - GRPC_PORT=50091
       - SERVICE_PORT=1111
       - SERVICE_HOST_LOCAL=0.0.0.0
+    ports:
+      - "8080:1111"
     command: "python main.py"
 

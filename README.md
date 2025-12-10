@@ -12,6 +12,6 @@ $ docker exec -it orders-api bash
 ```
 
 ```
-curl -X 'POST' 'http://localhost:8000/order?name=test&complited=false&data=10.10.2025' -H 'accept: application/json' -d ''
+curl -X 'POST' 'http://localhost:8080/order?name=test&complited=false&data=10.10.2025' -H 'accept: application/json' -d ''
 ```
 
