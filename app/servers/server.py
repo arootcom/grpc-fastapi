@@ -1,9 +1,11 @@
 import os
 import grpc
+from loguru import logger
 from concurrent.futures import ThreadPoolExecutor
 from grpc import aio
 from protos.order import order_pb2_grpc
 from servers.services.order import OrderService
+from models.order import Order
 
 class Server:
     """

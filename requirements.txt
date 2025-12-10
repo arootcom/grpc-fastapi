@@ -6,3 +6,4 @@ piccolo==1.30.0
 uvicorn==0.38.0
 fastapi==0.124.0
 jwt==1.4.0
+piccolo[sqlite]

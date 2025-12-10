@@ -4,7 +4,7 @@ from protos.order import order_pb2
 from protos.order import order_pb2_grpc
 from servers.schemas.order import OrderCreateRequest
 from servers.handlers.order import OrderHandler
-
+from servers.utils import GrpcParseMessage
 
 class OrderService(order_pb2_grpc.OrderServiceServicer):
     """
