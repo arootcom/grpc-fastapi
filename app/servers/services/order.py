@@ -2,7 +2,7 @@ from loguru import logger
 
 from protos.order import order_pb2
 from protos.order import order_pb2_grpc
-from servers.schemas.order import OrderCreateRequest
+from servers.schemas.order import OrderCreateRequest, OrderCreateResponse, OrderResponse
 from servers.handlers.order import OrderHandler
 from servers.utils import GrpcParseMessage
 
@@ -61,6 +61,11 @@ class OrderService(order_pb2_grpc.OrderServiceServicer):
         result = await OrderHandler.create_order(
             request=request
         )
+
+        result = OrderCreateResponse(
+            order=OrderResponse(**result[0])
+        )
+        logger.debug(f'Result created order: {result}')
 
         response = self.message.dict_to_rpc(
             data=result.dict(),

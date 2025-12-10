@@ -33,4 +33,4 @@ app.add_middleware(
 app.include_router(order.router)
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', port=int(os.environ["SERVICE_PORT"]), host=f'{os.environ["SERVICE_HOST_LOCAL"]}', reload=True)
+    uvicorn.run('main:app', port=int(os.environ["SERVICE_PORT"]), host=f'{os.environ["SERVICE_HOST_LOCAL"]}', log_level="debug", reload=True)
