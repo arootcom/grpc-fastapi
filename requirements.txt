@@ -1,0 +1,8 @@
+grpcio==1.76.0
+grpcio-tools==1.76.0
+pydantic==2.12.5
+loguru==0.7.3
+piccolo==1.30.0
+uvicorn==0.38.0
+fastapi==0.124.0
+jwt==1.4.0

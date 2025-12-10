@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package protos.order;
+
+enum OrderNotificationTypeEnum {
+  ORDER_NOTIFICATION_TYPE_ENUM_UNSPECIFIED = 0;
+  ORDER_NOTIFICATION_TYPE_ENUM_OK = 1;
+}
+
+message Order {
+  string uuid = 1;
+  string name = 2;
+  bool completed = 3;
+  string date = 4;
+}
+
+message CreateOrderRequest {
+    string name = 1;
+    bool completed = 2;
+    string date = 3;
+}
+
+message CreateOrderResponse {
+  OrderNotificationTypeEnum notificationType = 1;
+  Order order = 2;
+}
+
+service OrderService {
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+}
