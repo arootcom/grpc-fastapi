@@ -1,8 +1,8 @@
 version: '3.8'
-name: "grpc-fastapi"
+name: "grpc-fastapi-singl"
 services:
-  orders:
-    container_name: orders-api
+  main:
+    container_name: main
     image: python3-grpc
     volumes:
       - "./app:/usr/src/app"

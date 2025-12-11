@@ -1,0 +1,26 @@
+version: '3.8'
+name: "grpc-fastapi-multi"
+services:
+  gw:
+    container_name: gw
+    image: python3-grpc
+    volumes:
+      - "./app:/usr/src/app"
+    environment:
+      - GRPC_HOST_LOCAL=orders
+      - GRPC_PORT=50091
+      - SERVICE_PORT=1111
+      - SERVICE_HOST_LOCAL=0.0.0.0
+    ports:
+      - "8080:1111"
+    command: "python gw.py"
+  orders:
+    container_name: orders
+    image: python3-grpc
+    volumes:
+      - "./app:/usr/src/app"
+    environment:
+      - GRPC_HOST_LOCAL=orders
+      - GRPC_PORT=50091
+    command: "python orders.py"
+
