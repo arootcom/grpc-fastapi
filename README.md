@@ -1,7 +1,6 @@
 # grpc-fastapi
 
 # Подсказки
---
 
 1. Собрать образ
 
@@ -35,7 +34,6 @@ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accep
 ```
 
 # Материалы
---
 
 * [https://github.com/0xN1ck/grpc_example/](https://github.com/0xN1ck/grpc_example/)
 * [https://grpc.io/docs/languages/python/quickstart/](https://grpc.io/docs/languages/python/quickstart/)
