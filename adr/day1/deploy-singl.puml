@@ -1,0 +1,29 @@
+@startuml
+
+'!theme plain
+'skinparam {
+'  shadowing false
+'  nodesep 50
+'  ranksep 100
+'  linetype ortho
+'}
+
+node main <<container>> {
+    portin http as "http\nrest api\nport: 1111"
+    portin grpc as "grpc\nport: 50091"
+
+    component api as "Fast API" <<process>> {
+        component router as "api.order" <<router>>
+        http --> router
+
+        component client as "clients.order" <<grpc client>>
+        client --> grpc
+    }
+
+    component server as "gRPC Service" <<process>> {
+        component orders as "servers.services.order" <<service>>
+    }
+    grpc --> orders
+}
+
+@enduml
