@@ -12,7 +12,7 @@
 
 Основной сервис общается  
 
-![Component](./adr/day1/deploy-singl.png)
+![Component](./day1/deploy-singl.png)
 
 # Решение
 
