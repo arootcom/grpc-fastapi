@@ -38,4 +38,5 @@ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accep
 * [https://github.com/0xN1ck/grpc_example/](https://github.com/0xN1ck/grpc_example/)
 * [https://grpc.io/docs/languages/python/quickstart/](https://grpc.io/docs/languages/python/quickstart/)
 * [https://habr.com/ru/companies/wunderfund/articles/700474/](https://habr.com/ru/companies/wunderfund/articles/700474/)
+* [https://habr.com/ru/articles/894766/?ysclid=mj30m3o7vq394437717](Принцип каскадного снижения связанности)
 

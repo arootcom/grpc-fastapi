@@ -7,8 +7,8 @@ from servers.server import Server
 from api import order
 
 app = FastAPI(
-    title='Example gRPC service on Python',
-    description='This showing how to use gRPC on Python',
+    title='API Gateway',
+    description='',
 )
 
 app.add_middleware(
