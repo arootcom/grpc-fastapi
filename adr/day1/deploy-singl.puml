@@ -20,7 +20,7 @@ node main <<container>> {
         client --> grpc
     }
 
-    component server as "gRPC Service" <<process>> {
+    component server as "gRPC Server" <<asyncio process>> {
         component orders as "servers.services.order" <<service>>
     }
     grpc --> orders
