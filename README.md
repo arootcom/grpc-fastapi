@@ -46,8 +46,9 @@ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accep
 
 ```
 $ grpcurl -plaintext localhost:8787 list
+$ grpcurl -plaintext localhost:8787 list  protos.order.OrderService
+$ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderService/CreateOrder
 ```
-
 
 # Материалы
 
