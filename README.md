@@ -13,6 +13,7 @@ $ docker build -t python3-grpc .
 ```
 $ docker exec -it orders-api bash
 # python3 -m grpc_tools.protoc --python_out=./protos/order --grpc_python_out=./protos/order --pyi_out=./protos/order --proto_path=./protos/ ./protos/order.proto
+# python3 -m grpc_tools.protoc --python_out=./protos/reserve --grpc_python_out=./protos/reserve --pyi_out=./protos/reserve --proto_path=./protos/ ./protos/reserve.proto
 ```
 
 3. Запуск окружения все в одном конейнере

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package protos.warehouse;
+
+enum ReserveNotificationTypeEnum {
+  RESERVE_NOTIFICATION_TYPE_ENUM_UNSPECIFIED = 0;
+  RESERVE_NOTIFICATION_TYPE_ENUM_OK = 1;
+}
+
+message Item {
+  string uuid = 1;
+  string name = 2;
+  uint32 instock = 3;
+  uint32 reserve = 4;
+}
+
+message ReserveItemRequest {
+    string uuid = 1;
+    uint32 quantity = 2;
+}
+
+message ReserveItemResponse {
+  ReserveNotificationTypeEnum notificationType = 1;
+  Item item = 2;
+}
+
+service ReserveService {
+  rpc ReserveItem (ReserveItemRequest) returns (ReserveItemResponse);
+}
