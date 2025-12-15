@@ -13,5 +13,6 @@ services:
       - SERVICE_HOST_LOCAL=0.0.0.0
     ports:
       - "8080:1111"
+      - "8787:50091"
     command: "python main.py"
 

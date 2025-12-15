@@ -7,3 +7,5 @@ uvicorn==0.38.0
 fastapi==0.124.0
 jwt==1.4.0
 piccolo[sqlite]
+grpcio-reflection==1.75.1
+

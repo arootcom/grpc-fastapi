@@ -1,8 +1,11 @@
 import os
 import grpc
 from loguru import logger
-from concurrent.futures import ThreadPoolExecutor
 from grpc import aio
+from grpc_reflection.v1alpha import reflection
+from concurrent.futures import ThreadPoolExecutor
+
+from protos.order import order_pb2
 from protos.order import order_pb2_grpc
 from servers.services.order import OrderService
 from models.order import Order
@@ -59,6 +62,13 @@ class Server:
             self.SERVER_ADDRESS = f'{os.environ["GRPC_HOST_LOCAL"]}:{os.environ["GRPC_PORT"]}'
             self.server = aio.server(ThreadPoolExecutor(max_workers=10))
             self.server.add_insecure_port(self.SERVER_ADDRESS)
+
+            SERVICE_NAMES = (
+                order_pb2.DESCRIPTOR.services_by_name["OrderService"].full_name,
+                reflection.SERVICE_NAME,
+            )
+            reflection.enable_server_reflection(SERVICE_NAMES, self.server)
+
             self.initialized = True
 
     def register(self) -> None:

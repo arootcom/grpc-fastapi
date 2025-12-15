@@ -34,10 +34,28 @@ $ docker-compose -f docker-compose-multi.yaml up
 curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accept: application/json'
 ```
 
+6. gRPC запрос
+
+Установить grpcurl (пример для Kubuntu)
+
+```
+# sudo apt update
+# sudo apt install snapd
+# sudo snap install grpcurl --edge
+```
+
+```
+$ grpcurl -plaintext localhost:8787 list
+```
+
+
 # Материалы
 
-* [https://github.com/0xN1ck/grpc_example/](https://github.com/0xN1ck/grpc_example/)
-* [https://grpc.io/docs/languages/python/quickstart/](https://grpc.io/docs/languages/python/quickstart/)
-* [https://habr.com/ru/companies/wunderfund/articles/700474/](https://habr.com/ru/companies/wunderfund/articles/700474/)
+* [gRPC ecample](https://github.com/0xN1ck/grpc_example/)
+* [gRPC: Quick start](https://grpc.io/docs/languages/python/quickstart/)
+* [gRPC: Guides](https://grpc.io/docs/guides/)
+* [Полное руководство по модулю asyncio в Python. Часть 1](https://habr.com/ru/companies/wunderfund/articles/700474/)
 * [Принцип каскадного снижения связанности](https://habr.com/ru/articles/894766/?ysclid=mj30m3o7vq394437717)
+* [asyncio — Asynchronous I/O](https://docs.python.org/3/library/asyncio.html)
 * [Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
+* [gRPCurl — curl для gRPC-серверов](https://habr.com/ru/companies/vdsina/articles/563872/)
