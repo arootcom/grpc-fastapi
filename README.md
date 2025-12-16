@@ -47,7 +47,9 @@ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accep
 ```
 $ grpcurl -plaintext localhost:8787 list
 $ grpcurl -plaintext localhost:8787 list  protos.order.OrderService
+$ grpcurl -plaintext localhost:8787 describe protos.order.CreateOrderRequest
 $ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderService/CreateOrder
+$ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantity":10}' localhost:8787 protos.warehouse.ReserveService/ReserveItem
 ```
 
 # Материалы
@@ -60,3 +62,4 @@ $ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderServ
 * [asyncio — Asynchronous I/O](https://docs.python.org/3/library/asyncio.html)
 * [Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
 * [gRPCurl — curl для gRPC-серверов](https://habr.com/ru/companies/vdsina/articles/563872/)
+* [Python: Pydantic](https://docs.pydantic.dev/latest/concepts/models/)
