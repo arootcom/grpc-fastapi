@@ -7,6 +7,9 @@ services:
     volumes:
       - "./app:/usr/src/app"
     environment:
+      - GRPC_HOST_ORDERS=0.0.0.0
+      - GRPC_HOST_LOYALTIES=0.0.0.0
+      - GRPC_HOST_RESERVE=0.0.0.0
       - GRPC_HOST_LOCAL=0.0.0.0
       - GRPC_PORT=50091
       - SERVICE_PORT=1111

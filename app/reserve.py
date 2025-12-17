@@ -1,6 +1,6 @@
 import grpc
 import asyncio
-from servers.orders import Server
+from servers.reserve import Server
 
 async def serve() -> None:
     await Server().run()

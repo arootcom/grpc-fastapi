@@ -7,7 +7,9 @@ services:
     volumes:
       - "./app:/usr/src/app"
     environment:
-      - GRPC_HOST_LOCAL=orders
+      - GRPC_HOST_ORDERS=orders
+      - GRPC_HOST_LOYALTIES=loyalties
+      - GRPC_HOST_RESERVE=reserve
       - GRPC_PORT=50091
       - SERVICE_PORT=1111
       - SERVICE_HOST_LOCAL=0.0.0.0
@@ -23,4 +25,24 @@ services:
       - GRPC_HOST_LOCAL=orders
       - GRPC_PORT=50091
     command: "python orders.py"
+  loyalties:
+    container_name: loyalties
+    image: python3-grpc
+    volumes:
+      - "./app:/usr/src/app"
+    environment:
+      - GRPC_HOST_LOCAL=loyalties
+      - GRPC_PORT=50091
+    command: "python loyalties.py"
+  reserve:
+    container_name: reserve
+    image: python3-grpc
+    volumes:
+      - "./app:/usr/src/app"
+    environment:
+      - GRPC_HOST_LOCAL=reserve
+      - GRPC_PORT=50091
+    command: "python reserve.py"
+
+
 

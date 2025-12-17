@@ -20,7 +20,7 @@ $ docker exec -it orders-api bash
 3. Запуск окружения все в одном конейнере
 
 ```
-$ docker-compose up -d
+$ docker-compose f docker-compose-signl.yaml up
 ```
 
 4. Запуск окрежения каждый сикросервис в отдельном контейнере

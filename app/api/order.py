@@ -62,6 +62,7 @@ async def create_order(
             )
         )
     except AioRpcError as e:
+        logger.debug(f'Error create order: {e}')
         logger.error(e.details())
         raise HTTPException(status_code=404, detail=e.details())
 
