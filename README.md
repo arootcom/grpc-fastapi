@@ -14,6 +14,7 @@ $ docker build -t python3-grpc .
 $ docker exec -it orders-api bash
 # python3 -m grpc_tools.protoc --python_out=./protos/order --grpc_python_out=./protos/order --pyi_out=./protos/order --proto_path=./protos/ ./protos/order.proto
 # python3 -m grpc_tools.protoc --python_out=./protos/reserve --grpc_python_out=./protos/reserve --pyi_out=./protos/reserve --proto_path=./protos/ ./protos/reserve.proto
+# python3 -m grpc_tools.protoc --python_out=./protos/loyalty --grpc_python_out=./protos/loyalty --pyi_out=./protos/loyalty --proto_path=./protos/ ./protos/loyalty.proto
 ```
 
 3. Запуск окружения все в одном конейнере
@@ -50,6 +51,7 @@ $ grpcurl -plaintext localhost:8787 list  protos.order.OrderService
 $ grpcurl -plaintext localhost:8787 describe protos.order.CreateOrderRequest
 $ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderService/CreateOrder
 $ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantity":10}' localhost:8787 protos.warehouse.ReserveService/ReserveItem
+$ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantity":10}' localhost:8787 protos.loyalties.LoyaltyService/LoyaltyInfo
 ```
 
 # Материалы

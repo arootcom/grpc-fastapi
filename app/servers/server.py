@@ -14,6 +14,10 @@ from protos.reserve import reserve_pb2
 from protos.reserve import reserve_pb2_grpc
 from servers.services.reserve import ReserveService
 
+from protos.loyalty import loyalty_pb2
+from protos.loyalty import loyalty_pb2_grpc
+from servers.services.loyalty import LoyaltyService
+
 class Server:
     _instance = None
 
@@ -31,15 +35,21 @@ class Server:
             SERVICE_NAMES = (
                 order_pb2.DESCRIPTOR.services_by_name["OrderService"].full_name,
                 reserve_pb2.DESCRIPTOR.services_by_name["ReserveService"].full_name,
+                loyalty_pb2.DESCRIPTOR.services_by_name["LoyaltyService"].full_name,
                 reflection.SERVICE_NAME,
             )
             reflection.enable_server_reflection(SERVICE_NAMES, self.server)
+            logger.info(f'Enable reflation server')
 
             self.initialized = True
 
     def register(self) -> None:
         order_pb2_grpc.add_OrderServiceServicer_to_server(OrderService(), self.server)
+        logger.info(f'Register: Order Service')
         reserve_pb2_grpc.add_ReserveServiceServicer_to_server(ReserveService(), self.server)
+        logger.info(f'Register: Reserve Service')
+        loyalty_pb2_grpc.add_LoyaltyServiceServicer_to_server(LoyaltyService(), self.server)
+        logger.info(f'Register: Loyalty Service')
 
     async def run(self) -> None:
         await Order.create_table(if_not_exists=True)

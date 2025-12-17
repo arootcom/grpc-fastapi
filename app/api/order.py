@@ -10,8 +10,10 @@ from google.protobuf.json_format import MessageToDict
 
 from protos.order import order_pb2
 from protos.reserve import reserve_pb2
+from protos.loyalty import loyalty_pb2
 from clients.order import grpc_order_client
 from clients.reserve import grpc_reserve_client
+from clients.loyalty import grpc_loyalty_client
 
 router = APIRouter(prefix='/order', tags=['Order'])
 
@@ -35,10 +37,18 @@ async def create_order(
         date: str = f'{datetime.utcnow()}Z',
         client_orders: t.Any = Depends(grpc_order_client),
         client_reserve: t.Any = Depends(grpc_reserve_client),
+        client_loyalty: t.Any = Depends(grpc_loyalty_client),
 ) -> JSONResponse:
     try:
         reserve = await client_reserve.ReserveItem(
             reserve_pb2.ReserveItemRequest(
+                uuid = "5f23a419-3a68-4c6a-87a9-d14f9f021a64",
+                quantity = 10,
+            )
+        )
+
+        loyalty = await client_loyalty.LoyaltyInfo(
+            loyalty_pb2.LoyaltyRequest(
                 uuid = "5f23a419-3a68-4c6a-87a9-d14f9f021a64",
                 quantity = 10,
             )

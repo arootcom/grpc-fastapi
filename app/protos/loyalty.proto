@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package protos.loyalties;
+
+enum LoyaltyNotificationTypeEnum {
+  LOYALTY_NOTIFICATION_TYPE_ENUM_UNSPECIFIED = 0;
+  LOYALTY_NOTIFICATION_TYPE_ENUM_OK = 1;
+}
+
+message Loyalty {
+  string uuid = 1;
+  uint32 persent = 2;
+}
+
+message LoyaltyRequest {
+    string uuid = 1;
+    uint32 quantity = 2;
+}
+
+message LoyaltyResponse {
+  LoyaltyNotificationTypeEnum notificationType = 1;
+  Loyalty loyalty = 2;
+}
+
+service LoyaltyService {
+  rpc LoyaltyInfo (LoyaltyRequest) returns (LoyaltyResponse);
+}
