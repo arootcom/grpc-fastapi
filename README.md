@@ -63,3 +63,4 @@ $ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantit
 * [Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
 * [gRPCurl — curl для gRPC-серверов](https://habr.com/ru/companies/vdsina/articles/563872/)
 * [Python: Pydantic](https://docs.pydantic.dev/latest/concepts/models/)
+* [FastAPI и Dependency Injection: правда или вымысел?](https://habr.com/ru/articles/867040/?ysclid=mj9rmyeivl433586525)

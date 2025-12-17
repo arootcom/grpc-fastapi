@@ -9,7 +9,9 @@ from grpc.aio import AioRpcError
 from google.protobuf.json_format import MessageToDict
 
 from protos.order import order_pb2
+from protos.reserve import reserve_pb2
 from clients.order import grpc_order_client
+from clients.reserve import grpc_reserve_client
 
 router = APIRouter(prefix='/order', tags=['Order'])
 
@@ -18,29 +20,6 @@ async def single_order(
         uuid: str,
         client: t.Any = Depends(grpc_order_client),
 ) -> JSONResponse:
-    """
-    Получает данные одного заказа по UUID через gRPC сервис OrderService.
-
-    Функция вызывает метод ReadOrder gRPC сервиса OrderService для получения данных заказа по указанному UUID.
-    В случае ошибки gRPC запроса, выбрасывается HTTPException.
-
-    Параметры:
-    ----------
-    uuid : str
-        Уникальный идентификатор заказа.
-    client : Any, optional
-        Клиент gRPC для взаимодействия с сервисом OrderService (по умолчанию используется зависимость grpc_order_client).
-
-    Возвращает:
-    -----------
-    JSONResponse
-        JSON-ответ с данными запрошенного заказа.
-
-    Исключения:
-    -----------
-    HTTPException
-        Исключение, выбрасываемое при ошибке gRPC запроса, с кодом состояния 404 и деталями ошибки.
-    """
     try:
         order = await client.ReadOrder(order_pb2.ReadOrderRequest(uuid=uuid))
     except AioRpcError as e:
@@ -54,37 +33,18 @@ async def create_order(
         name: str,
         completed: bool,
         date: str = f'{datetime.utcnow()}Z',
-        client: t.Any = Depends(grpc_order_client),
+        client_orders: t.Any = Depends(grpc_order_client),
+        client_reserve: t.Any = Depends(grpc_reserve_client),
 ) -> JSONResponse:
-    """
-    Создает новый заказ через gRPC сервис OrderService.
-
-    Функция вызывает метод CreateOrder gRPC сервиса OrderService для создания нового заказа
-    с указанными параметрами. В случае ошибки gRPC запроса, выбрасывается HTTPException.
-
-    Параметры:
-    ----------
-    name : str
-        Название заказа.
-    completed : bool
-        Статус выполнения заказа.
-    date : str, optional
-        Дата создания заказа в формате строки (по умолчанию текущая дата и время в формате UTC с 'Z').
-    client : Any, optional
-        Клиент gRPC для взаимодействия с сервисом OrderService (по умолчанию используется зависимость grpc_order_client).
-
-    Возвращает:
-    -----------
-    JSONResponse
-        JSON-ответ с данными созданного заказа.
-
-    Исключения:
-    -----------
-    HTTPException
-        Исключение, выбрасываемое при ошибке gRPC запроса, с кодом состояния 404 и деталями ошибки.
-    """
     try:
-        order = await client.CreateOrder(
+        reserve = await client_reserve.ReserveItem(
+            reserve_pb2.ReserveItemRequest(
+                uuid = "5f23a419-3a68-4c6a-87a9-d14f9f021a64",
+                quantity = 10,
+            )
+        )
+
+        order = await client_orders.CreateOrder(
             order_pb2.CreateOrderRequest(
                 name=name,
                 completed=completed,
