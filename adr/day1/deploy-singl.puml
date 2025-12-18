@@ -1,46 +1,43 @@
 @startuml
 
 '!theme plain
-skinparam {
+'skinparam {
 '  shadowing false
 '  nodesep 50
 '  ranksep 100
-  linetype ortho
+'  linetype ortho
+'}
+
+hide empty members
+
+component curl <<client>> {
 }
 
-node docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml docker-compose-single]]" <<docker>> {
-    'portin local_http as "http\nrest api\nport: 8080"
-    'portout local_grpc as "grpc\nport: 8787" 
+component grpcurl <<client>> {
+}
+
+cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml docker-compose-single]]" <<docker>> {
+    interface local_http as "http\nrest api\nport: 8080"
+    curl -(0- local_http
+
+    interface local_grpc as "grpc\nport: 8787" 
+    grpcurl -(0- local_grpc
 
     node main as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/main.py main]]" <<container>> {
-        'portin http as "http\nrest api\nport: 1111"
-        'local_http --> http
+        interface http as "http\nrest api\nport: 1111"
+        local_http #--# http
 
-        'portout grpc as "grpc\nport: 50091"
-        'grpc <-- local_grpc 
+        interface grpc as "grpc\nport: 50091"
+        local_grpc #--# grpc 
 
-        component api as "Fast API" <<process>> {
-            component router as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/api/order.py api.order]]" <<router>>
-            'http --> router
-
-            component cli_orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/clients/order.py clients.order]]" <<grpc client>>
-            'cli_orders --> grpc
-            router --> cli_orders : Dependency\nInjection
-
-            component cli_reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/clients/reserve.py clients.reserve]]" <<grpc client>>
-            'cli_reserve --> grpc
-            router --> cli_reserve : Dependency\nInjection
-
-            component cli_loyalty as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/clients/loyalty.py clients.loyalty]]" <<grpc client>>
-            'cli_loyalty --> grpc
-            router --> cli_loyalty : Dependency\nInjection
+        component api as "Fast API" <<first process>> {
         }
+        http --# api
 
         component server as "gRPC Servers" <<asyncio process>> {
-            component orders as "servers.services.order" <<service>>
-            component reserve as "servers.services.reserve" <<service>>
         }
-        'grpc --> orders
+        grpc --# server
+        grpc -0)- api
     }
 }
 

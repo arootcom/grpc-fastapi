@@ -54,6 +54,12 @@ $ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantit
 $ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantity":10}' localhost:8787 protos.loyalties.LoyaltyService/LoyaltyInfo
 ```
 
+7. plantuml to svg
+
+```
+$ plantuml -tsvg filename.puml
+```
+
 # Материалы
 
 * [gRPC ecample](https://github.com/0xN1ck/grpc_example/)
