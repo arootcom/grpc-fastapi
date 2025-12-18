@@ -15,9 +15,19 @@
 
 ## Контекст
 
-Основной сервис общается  
+
 
 ![Component](./day1/deploy-singl.svg)
+
+<iframe src="./day1/deploy-singl.svg'
+        scrolling="yes" 
+        border="0" 
+        frameborder="no" 
+        framespacing="0" 
+        allowfullscreen="true" 
+        width="100%" 
+        height="400">
+</iframe>
 
 ## Решение
 
