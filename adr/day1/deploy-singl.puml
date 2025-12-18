@@ -1,30 +1,47 @@
 @startuml
 
 '!theme plain
-'skinparam {
+skinparam {
 '  shadowing false
 '  nodesep 50
 '  ranksep 100
-'  linetype ortho
-'}
+  linetype ortho
+}
 
-node main <<container>> {
-    portin http as "http\nrest api\nport: 1111"
-    portin grpc as "grpc\nport: 50091"
+node docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml docker-compose-single]]" <<docker>> {
+    'portin local_http as "http\nrest api\nport: 8080"
+    'portout local_grpc as "grpc\nport: 8787" 
 
-    component api as "Fast API" <<process>> {
-        component router as "api.order" <<router>>
-        http --> router
+    node main as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/main.py main]]" <<container>> {
+        'portin http as "http\nrest api\nport: 1111"
+        'local_http --> http
 
-        component client as "clients.order" <<grpc client>>
-        client --> grpc
+        'portout grpc as "grpc\nport: 50091"
+        'grpc <-- local_grpc 
+
+        component api as "Fast API" <<process>> {
+            component router as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/api/order.py api.order]]" <<router>>
+            'http --> router
+
+            component cli_orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/clients/order.py clients.order]]" <<grpc client>>
+            'cli_orders --> grpc
+            router --> cli_orders : Dependency\nInjection
+
+            component cli_reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/clients/reserve.py clients.reserve]]" <<grpc client>>
+            'cli_reserve --> grpc
+            router --> cli_reserve : Dependency\nInjection
+
+            component cli_loyalty as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/clients/loyalty.py clients.loyalty]]" <<grpc client>>
+            'cli_loyalty --> grpc
+            router --> cli_loyalty : Dependency\nInjection
+        }
+
+        component server as "gRPC Servers" <<asyncio process>> {
+            component orders as "servers.services.order" <<service>>
+            component reserve as "servers.services.reserve" <<service>>
+        }
+        'grpc --> orders
     }
-
-    component server as "gRPC Servers" <<asyncio process>> {
-        component orders as "servers.services.order" <<service>>
-        component reserve as "servers.services.reserve" <<service>>
-    }
-    grpc --> orders
 }
 
 @enduml
