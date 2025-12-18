@@ -9,6 +9,7 @@
 '}
 
 hide empty members
+allowmixing
 
 component curl <<client>> {
 }
@@ -17,17 +18,17 @@ component grpcurl <<client>> {
 }
 
 cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml docker-compose-single]]" <<docker>> {
-    interface local_http as "http\nrest api\nport: 8080"
+    interface local_http as "http\nrest api\nport: 8080" <<interface>>
     curl -(0- local_http
 
-    interface local_grpc as "grpc\nport: 8787" 
+    interface local_grpc as "grpc\nport: 8787" <<interface>>
     grpcurl -(0- local_grpc
 
     node main as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/main.py main]]" <<container>> {
-        interface http as "http\nrest api\nport: 1111"
+        interface http as "http\nrest api\nport: 1111" <<interface>>
         local_http #--# http
 
-        interface grpc as "grpc\nport: 50091"
+        interface grpc as "grpc\nport: 50091" <<interface>>
         local_grpc #--# grpc 
 
         component api as "Fast API" <<first process>> {
@@ -35,8 +36,13 @@ cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-com
         http --# api
 
         component server as "gRPC Servers" <<asyncio process>> {
+            class orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/order.py servers.services.order]]" <<service>>
+            class reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/reserve.py servers.services.reserve]]" <<service>>
+            class loyalty as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/loyalty.py servers.services.loyalty]]" <<service>>
         }
-        grpc --# server
+        grpc --# orders
+        grpc --# reserve
+        grpc --# loyalty
         grpc -0)- api
     }
 }
