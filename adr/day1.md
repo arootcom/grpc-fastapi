@@ -63,28 +63,80 @@ main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:register:52 - Regist
 main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:run:58 - *** Сервис gRPC запущен: 0.0.0.0:50091 ***
 ```
 
+Сервис main запускается вызовом команды ```python main.py``` (см. файл [main.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/main.py)). Для управления контенерами в приложении используется [docker-compose](https://docs.docker.com/compose/). Праметры окружения описаны в файле (docker-componse-singl.yaml)[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml]
+
+```yaml
+version: '3.8'
+name: "grpc-fastapi-singl"
+services:
+  main:
+    container_name: main
+    image: python3-grpc
+    volumes:
+      - "./app:/usr/src/app"
+    environment:
+      - GRPC_HOST_ORDERS=0.0.0.0
+      - GRPC_HOST_LOYALTIES=0.0.0.0
+      - GRPC_HOST_RESERVE=0.0.0.0
+      - GRPC_HOST_LOCAL=0.0.0.0
+      - GRPC_PORT=50091
+      - SERVICE_PORT=1111
+      - SERVICE_HOST_LOCAL=0.0.0.0
+    ports:
+      - "8080:1111"
+      - "8787:50091"
+    command: "python main.py"
+```
+
 Enable reflation server - это сервис, который позволяет клиентам динамически обнаруживать сервисы и их методы на сервере gRPC во время выполнения. Работает по протоколу gRPC Server Reflection Protocol для обнаружения сервисов. Инициализация реализована в [singleton](https://habr.com/ru/companies/otus/articles/779914/) классе [servers.server](https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/server.py) , который гарантирует, что у класса будет только один экземпляр.
 
 ```python
-    [skip]
+from loguru import logger
+from grpc import aio
+from grpc_reflection.v1alpha import reflection
+    
+[skip]
 
-    self.SERVER_ADDRESS = f'{os.environ["GRPC_HOST_LOCAL"]}:{os.environ["GRPC_PORT"]}'
-    self.server = aio.server(ThreadPoolExecutor(max_workers=10))
-    self.server.add_insecure_port(self.SERVER_ADDRESS)
+    def __init__(self) -> None:
+        if not hasattr(self, 'initialized'):
+           self.SERVER_ADDRESS = f'{os.environ["GRPC_HOST_LOCAL"]}:{os.environ["GRPC_PORT"]}'
+            self.server = aio.server(ThreadPoolExecutor(max_workers=10))
+            self.server.add_insecure_port(self.SERVER_ADDRESS)
 
-    SERVICE_NAMES = (
-        order_pb2.DESCRIPTOR.services_by_name["OrderService"].full_name,
-        reserve_pb2.DESCRIPTOR.services_by_name["ReserveService"].full_name,
-        loyalty_pb2.DESCRIPTOR.services_by_name["LoyaltyService"].full_name,
-        reflection.SERVICE_NAME,
-    )
-    reflection.enable_server_reflection(SERVICE_NAMES, self.server)
+            SERVICE_NAMES = (
+                order_pb2.DESCRIPTOR.services_by_name["OrderService"].full_name,
+                reserve_pb2.DESCRIPTOR.services_by_name["ReserveService"].full_name,
+                loyalty_pb2.DESCRIPTOR.services_by_name["LoyaltyService"].full_name,
+                reflection.SERVICE_NAME,
+            )
+            reflection.enable_server_reflection(SERVICE_NAMES, self.server)
+            logger.info(f'Enable reflation server')
 
-    [skip]
+            self.initialized = True
+[skip]
 ```
 
+После регистрации выполнена регистрация доступных сервисов в данном экземпляре сервера и его запуск
 
+```python
+[skip]
 
+    def register(self) -> None:
+        order_pb2_grpc.add_OrderServiceServicer_to_server(OrderService(), self.server)
+        logger.info(f'Register: Order Service')
+        reserve_pb2_grpc.add_ReserveServiceServicer_to_server(ReserveService(), self.server)
+        logger.info(f'Register: Reserve Service')
+        loyalty_pb2_grpc.add_LoyaltyServiceServicer_to_server(LoyaltyService(), self.server)
+        logger.info(f'Register: Loyalty Service')
+
+    async def run(self) -> None:
+        self.register()
+        await self.server.start()
+        logger.info(f'*** Сервис gRPC запущен: {self.SERVER_ADDRESS} ***')
+        await self.server.wait_for_termination()
+
+[skip]
+```
 
 ### Исследование прототипа
 
