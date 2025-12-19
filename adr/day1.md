@@ -63,9 +63,11 @@ main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:register:52 - Regist
 main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:run:58 - *** Сервис gRPC запущен: 0.0.0.0:50091 ***
 ```
 
-Enable reflation server - это сервис, который позволяет клиентам динамически обнаруживать сервисы и их методы на сервере gRPC во время выполнения. Работает по протоколу gRPC Server Reflection Protocol для обнаружения сервисов. Инициализация реализована в [[https://habr.com/ru/companies/otus/articles/779914/ singleton]] классе [[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/server.py servers.server]], который гарантирует, что у класса будет только один экземпляр.
+Enable reflation server - это сервис, который позволяет клиентам динамически обнаруживать сервисы и их методы на сервере gRPC во время выполнения. Работает по протоколу gRPC Server Reflection Protocol для обнаружения сервисов. Инициализация реализована в [singleton](https://habr.com/ru/companies/otus/articles/779914/) классе [servers.server](https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/server.py) , который гарантирует, что у класса будет только один экземпляр.
 
 ```python
+    [skip]
+
     self.SERVER_ADDRESS = f'{os.environ["GRPC_HOST_LOCAL"]}:{os.environ["GRPC_PORT"]}'
     self.server = aio.server(ThreadPoolExecutor(max_workers=10))
     self.server.add_insecure_port(self.SERVER_ADDRESS)
@@ -77,6 +79,8 @@ Enable reflation server - это сервис, который позволяет
         reflection.SERVICE_NAME,
     )
     reflection.enable_server_reflection(SERVICE_NAMES, self.server)
+
+    [skip]
 ```
 
 
