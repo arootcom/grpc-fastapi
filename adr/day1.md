@@ -63,7 +63,7 @@ main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:register:52 - Regist
 main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:run:58 - *** Сервис gRPC запущен: 0.0.0.0:50091 ***
 ```
 
-Сервис main запускается вызовом команды ```python main.py``` (см. файл [main.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/main.py)). Для управления контенерами в приложении используется [docker-compose](https://docs.docker.com/compose/). Праметры окружения описаны в файле (docker-componse-singl.yaml)[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml]
+Сервис main запускается вызовом команды ```python main.py``` (см. файл [main.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/main.py)). Для управления контенерами в приложении используется [docker-compose](https://docs.docker.com/compose/). Праметры окружения описаны в файле [docker-componse-singl.yaml](https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-singl.yaml)
 
 ```yaml
 version: '3.8'
