@@ -31,14 +31,14 @@ cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-com
         interface grpc as "grpc\nport: 50091" <<interface>>
         local_grpc #--# grpc 
 
-        component api as "Fast API" <<first process>> {
+        component api as "Fast API\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/api/order.py api.order]]" <<first process>> {
         }
         http --# api
 
-        component server as "gRPC Servers" <<asyncio process>> {
-            class orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/order.py servers.services.order]]" <<service>>
-            class reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/reserve.py servers.services.reserve]]" <<service>>
-            class loyalty as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/loyalty.py servers.services.loyalty]]" <<service>>
+        component server as "gRPC Server\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/server.py servers.server]]" <<asyncio process>> {
+        class orders as "Orders Service\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/order.py servers.services.order]]" <<service>>
+        class reserve as "Reserve Service\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/reserve.py servers.services.reserve]]" <<service>>
+            class loyalty as "Loyalties Service\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/loyalty.py servers.services.loyalty]]" <<service>>
         }
         grpc --# orders
         grpc --# reserve
