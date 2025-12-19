@@ -10,6 +10,8 @@
 
 ![Component](./day1/deploy-singl.svg)
 
+### Запуск прототипа
+
 Что бы запустить прототип необходимо в первую очередь собрать образ контейнера, для этого выполните следущие действия:
 
 1. Склонировать репозиторий проекта
@@ -35,7 +37,7 @@ $ git branch
   main
 ```
 
-2. Собрать образ контейнера pyton3-grpc
+3. Собрать образ контейнера pyton3-grpc
 
 ```
 $ docker build -t python3-grpc .
@@ -49,6 +51,39 @@ REPOSITORY     TAG       IMAGE ID       CREATED        SIZE
 python3-grpc   latest    1c1383197816   45 hours ago   1.25GB
 python         3         4db51a7249e1   2 weeks ago    1.12GB
 ```
+
+4. Теперь все готово для зауска
+
+```
+$ docker-compose -f docker-compose-signl.yaml up
+main  | 2025-12-19 09:26:34.346 | INFO     | servers.server:__init__:42 - Enable reflation server
+main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:register:48 - Register: Order Service
+main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:register:50 - Register: Reserve Service
+main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:register:52 - Register: Loyalty Service
+main  | 2025-12-19 09:26:34.354 | INFO     | servers.server:run:58 - *** Сервис gRPC запущен: 0.0.0.0:50091 ***
+```
+
+Enable reflation server - это сервис, который позволяет клиентам динамически обнаруживать сервисы и их методы на сервере gRPC во время выполнения. Работает по протоколу gRPC Server Reflection Protocol для обнаружения сервисов. Инициализация реализована в [[https://habr.com/ru/companies/otus/articles/779914/ singleton]] классе [[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/server.py servers.server]], который гарантирует, что у класса будет только один экземпляр.
+
+```python
+    self.SERVER_ADDRESS = f'{os.environ["GRPC_HOST_LOCAL"]}:{os.environ["GRPC_PORT"]}'
+    self.server = aio.server(ThreadPoolExecutor(max_workers=10))
+    self.server.add_insecure_port(self.SERVER_ADDRESS)
+
+    SERVICE_NAMES = (
+        order_pb2.DESCRIPTOR.services_by_name["OrderService"].full_name,
+        reserve_pb2.DESCRIPTOR.services_by_name["ReserveService"].full_name,
+        loyalty_pb2.DESCRIPTOR.services_by_name["LoyaltyService"].full_name,
+        reflection.SERVICE_NAME,
+    )
+    reflection.enable_server_reflection(SERVICE_NAMES, self.server)
+```
+
+
+
+
+### Исследование прототипа
+
 
 ## Решение
 
