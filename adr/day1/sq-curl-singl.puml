@@ -10,7 +10,7 @@ box main
     participant loyalty as "Loyalties Service"
 end box
 
-curl -> api : Создать заказ\n**GET** http://localhost:8080/order?name=test&completed=false
+curl -> api : Создать заказ\n**POST** http://localhost:8080/order?name=test&completed=false
 activate api
 
 api -> reserve : Зыпрос на резервирование\n**gRPC** localhost:8787 protos.warehouse.ReserveService/ReserveItem

@@ -149,7 +149,7 @@ CONTAINER ID   IMAGE          COMMAND            CREATED      STATUS      PORTS 
 
 ```
 
-Видим один запущенный контейнер с именем (колонка NAMeS) main. Два порта определенные в контейнере проброщены на порты localhost, как показано на схеме выше. Порт 8080 принимает запросы по [http](https://ru.wikipedia.org/wiki/HTTP), а 8787 по [gRPC](https://ru.wikipedia.org/wiki/GRPC)
+Видим один запущенный контейнер с именем (колонка NAMES) main. Два порта определенные в контейнере проброщены на порты localhost, как показано на схеме выше. Порт 8080 принимает запросы по [http](https://ru.wikipedia.org/wiki/HTTP), а 8787 по [gRPC](https://ru.wikipedia.org/wiki/GRPC)
 
 2. REST API запрос создания заказа
 
@@ -161,7 +161,7 @@ $ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'acc
 
 Результат обработки запроса
 
-```
+```json
 {
   "notificationType": "ORDER_NOTIFICATION_TYPE_ENUM_OK",
   "order": {
@@ -172,7 +172,32 @@ $ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'acc
 
 ![](./day1/sq-curl-singl.svg)
 
+В консоде, где запушен docker-compose, видим логи.Последовательные записи о вызовах и результатах связанных бизнес логикой микросервисах.
 
+Получение входящего запроса и запрос на резервирование
+
+```
+main  | INFO:     172.22.0.1:56680 - "POST /order?name=test&completed=false HTTP/1.1" 200 OK
+main  | 2025-12-22 09:26:56.083 | INFO     | servers.services.reserve:ReserveItem:16 - Received request is for reserve item: uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64' quantity=10
+main  | 2025-12-22 09:26:56.083 | SUCCESS  | servers.handlers.reserve:reserve_item:12 - Reserved item: {'uuid': '5f23a419-3a68-4c6a-87a9-d14f9f021a64', 'name': 'asdf', 'instock': 3, 'reserve': 10}
+main  | 2025-12-22 09:26:56.084 | DEBUG    | servers.services.reserve:ReserveItem:20 - Result reserve item: notificationType='RESERVE_NOTIFICATION_TYPE_ENUM_OK' item=Item(uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64', name='asdf', instock=3, reserve=10)
+```
+
+Запрос информации о лояльности
+
+```
+main  | 2025-12-22 09:26:56.086 | INFO     | servers.services.loyalty:LoyaltyInfo:16 - Received request is for loyalty info: uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64' quantity=10
+main  | 2025-12-22 09:26:56.086 | SUCCESS  | servers.handlers.loyalty:loyalty_info:10 - Loyalty info: {'uuid': '5f23a419-3a68-4c6a-87a9-d14f9f021a64', 'persent': 10}
+main  | 2025-12-22 09:26:56.086 | DEBUG    | servers.services.loyalty:LoyaltyInfo:20 - Result loyalty info: notificationType='LOYALTY_NOTIFICATION_TYPE_ENUM_OK' loyalty=Loyalty(uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64', persent=10)
+```
+
+Создание заказа
+
+```
+main  | 2025-12-22 09:26:56.089 | INFO     | servers.services.order:CreateOrder:25 - Received request is for create order: uuid='9841d6f7-69df-4986-b837-65c386acb41d' name='test' completed=False date='2025-12-19 09:26:34.311752Z'
+main  | 2025-12-22 09:26:56.104 | SUCCESS  | servers.handlers.order:create_order:8 - Created order: [{'uuid': '9841d6f7-69df-4986-b837-65c386acb41d'}]
+main  | 2025-12-22 09:26:56.104 | DEBUG    | servers.services.order:CreateOrder:29 - Result created order: notificationType='ORDER_NOTIFICATION_TYPE_ENUM_OK' order=OrderResponse(uuid='9841d6f7-69df-4986-b837-65c386acb41d', name=None, completed=False, date=None)
+```
 
 ## Решение
 
