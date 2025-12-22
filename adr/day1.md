@@ -269,6 +269,53 @@ $ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderServ
     * reserve service - микросервис упраление резервированием данных заказа
     * loyalty service - микросервис данными о лояльности
 
+### Запуск измененного прототипа
+
+> [!IMPOTANT]
+>
+> Выполнены условия:
+>
+> 1. Репозиторий проекта склонирован
+> 2. Выбрана ветка day1
+> 3. Образ контейнера pyton3-grpc собран
+>
+
+1. Запуск проекта 
+
+```
+$ docker-compose -f ./docker-compose-multi.yaml up
+[+] Running 4/0
+ ⠿ Container gw         Created
+ ⠿ Container loyalties  Created
+ ⠿ Container orders     Created
+ ⠿ Container reserve    Created
+Attaching to gw, loyalties, orders, reserve
+reserve    | 2025-12-22 12:23:20.786 | INFO     | servers.reserve:__init__:31 - Enable reflation server
+reserve    | 2025-12-22 12:23:20.786 | INFO     | servers.reserve:register:37 - Register: Reserve Service
+reserve    | 2025-12-22 12:23:20.786 | INFO     | servers.reserve:run:42 - *** Сервис Reserve gRPC запущен: reserve:50091 ***
+loyalties  | 2025-12-22 12:23:20.833 | INFO     | servers.loyalties:__init__:31 - Enable reflation server
+loyalties  | 2025-12-22 12:23:20.834 | INFO     | servers.loyalties:register:37 - Register: Loyalty Service
+loyalties  | 2025-12-22 12:23:20.834 | INFO     | servers.loyalties:run:42 - *** Сервис Loyalties gRPC запущен: loyalties:50091 ***
+orders     | 2025-12-22 12:23:20.952 | INFO     | servers.orders:__init__:32 - Enable reflation server
+orders     | 2025-12-22 12:23:20.959 | INFO     | servers.orders:register:38 - Register: Order Service
+orders     | 2025-12-22 12:23:20.960 | INFO     | servers.orders:run:44 - *** Сервис Orders gRPC запущен: orders:50091 ***
+gw         | INFO:     Will watch for changes in these directories: ['/usr/src/app']
+gw         | INFO:     Uvicorn running on http://0.0.0.0:1111 (Press CTRL+C to quit)
+gw         | INFO:     Started reloader process [1] using StatReload
+gw         | INFO:     Started server process [8]
+gw         | INFO:     Waiting for application startup.
+gw         | INFO:     Application startup complete.
+```
+
+По логам видим, что запустилось четыре контейнера, которые описаны в файле [docker-compose-multi.yaml](https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-multi.yaml)
+Скрипты для запуска контейнеров размещены в директори проекта [app/](https://github.com/arootcom/grpc-fastapi/tree/day1/app/) и соответстствуют именанам контейнеров:
+    * [gw.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/gw.py)
+    * [loyalties.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/loyalties.py)
+    * [orders.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/orders.py)
+    * [reserve.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/reserve.py)
+
+### Исследование измененного прототипа
+
 ## Обоснование
 
 Принцип «Один микросервис — один контейнер» в микросервисной архитектуре обоснован необходимостью изоляции и переносимости микросервисов. Этот подход позволяет разрабатывать, тестировать и масштабировать компоненты по отдельности, а также обеспечивать согласованность между средой разработки, тестовой средой и производственной средой.
