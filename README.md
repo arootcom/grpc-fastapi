@@ -74,3 +74,4 @@ $ plantuml -tsvg filename.puml
 * [FastAPI и Dependency Injection: правда или вымысел?](https://habr.com/ru/articles/867040/?ysclid=mj9rmyeivl433586525)
 * [How to use PlantUML with Markdown](https://gist.github.com/noamtamim/f11982b28602bd7e604c233fbe9d910f)
 * [Github: Basic writing and formatting syntax](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+* [Обработка распределенных транзакций в микросервисной архитектуре](https://habr.com/ru/companies/piter/articles/522366/)

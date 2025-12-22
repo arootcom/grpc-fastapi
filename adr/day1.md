@@ -199,6 +199,55 @@ main  | 2025-12-22 09:26:56.104 | SUCCESS  | servers.handlers.order:create_order
 main  | 2025-12-22 09:26:56.104 | DEBUG    | servers.services.order:CreateOrder:29 - Result created order: notificationType='ORDER_NOTIFICATION_TYPE_ENUM_OK' order=OrderResponse(uuid='9841d6f7-69df-4986-b837-65c386acb41d', name=None, completed=False, date=None)
 ```
 
+3. Исследуем gRPC сервисы, методы, модели и вызовы
+
+Используем утилиту командной строки [grpcurl](https://habr.com/ru/companies/vdsina/articles/563872/)
+
+Просмотр обслуживаемых микросервисов
+
+```bash
+$ grpcurl -plaintext localhost:8787 list
+grpc.reflection.v1alpha.ServerReflection
+protos.loyalties.LoyaltyService
+protos.order.OrderService
+protos.warehouse.ReserveService
+```
+
+Просмотр методов микросервиса
+
+```bash
+$ grpcurl -plaintext localhost:8787 list  protos.order.OrderService
+protos.order.OrderService.CreateOrder
+```
+
+Просмотр модели запроса
+
+```bash
+$ grpcurl -plaintext localhost:8787 describe protos.order.CreateOrderRequest
+protos.order.CreateOrderRequest is a message:
+message CreateOrderRequest {
+  string name = 1;
+  bool completed = 2;
+  string date = 3;
+}
+```
+
+Создание заказа
+
+```bash
+$ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderService/CreateOrder
+{
+  "notificationType": "ORDER_NOTIFICATION_TYPE_ENUM_OK",
+  "order": {
+    "uuid": "0eca9a0f-a52a-4d76-b9f8-375d3387c143"
+  }
+}
+```
+
+> [!CAUTION]
+> Видим по логам, что при прямом вызове gRPC, происходит прямое резервирование, без учета бизнес логики проверки остатков и применение лояльности.
+> Это означает, что при прямом доступе нет гарантии атомарности операции - завершения всех шагов, либо не одного.
+
 ## Решение
 
 Каждый микросервис оформить в отдельный контейнер. Это позволит изолировать сервис, обеспечить независимость в развертывании и маштабировании.
