@@ -350,10 +350,40 @@ $ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'acc
 }
 ```
 
-А вот логи и адреса вызовов поменялись
+А вот логи и адреса вызовов поменялись. Теперь каздый запрос идет в отдельный контейнер
 
 ![](./day1/sq-curl-multi.svg)
 
+
+Получение входящего запроса
+
+```
+gw         | INFO:     172.20.0.1:57392 - "POST /order?name=test&completed=false HTTP/1.1" 200 OK
+```
+
+Запрос на резервирование
+
+```
+reserve    | 2025-12-22 13:54:52.486 | INFO     | servers.services.reserve:ReserveItem:16 - Received request is for reserve item: uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64' quantity=10
+reserve    | 2025-12-22 13:54:52.486 | SUCCESS  | servers.handlers.reserve:reserve_item:12 - Reserved item: {'uuid': '5f23a419-3a68-4c6a-87a9-d14f9f021a64', 'name': 'asdf', 'instock': 3, 'reserve': 10}
+reserve    | 2025-12-22 13:54:52.486 | DEBUG    | servers.services.reserve:ReserveItem:20 - Result reserve item: notificationType='RESERVE_NOTIFICATION_TYPE_ENUM_OK' item=Item(uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64', name='asdf', instock=3, reserve=10)
+```
+
+Запрос информации о лояльности
+
+```
+loyalties  | 2025-12-22 13:54:52.491 | INFO     | servers.services.loyalty:LoyaltyInfo:16 - Received request is for loyalty info: uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64' quantity=10
+loyalties  | 2025-12-22 13:54:52.492 | SUCCESS  | servers.handlers.loyalty:loyalty_info:10 - Loyalty info: {'uuid': '5f23a419-3a68-4c6a-87a9-d14f9f021a64', 'persent': 10}
+loyalties  | 2025-12-22 13:54:52.492 | DEBUG    | servers.services.loyalty:LoyaltyInfo:20 - Result loyalty info: notificationType='LOYALTY_NOTIFICATION_TYPE_ENUM_OK' loyalty=Loyalty(uuid='5f23a419-3a68-4c6a-87a9-d14f9f021a64', persent=10)
+```
+
+Создание заказа
+
+```
+orders     | 2025-12-22 13:54:52.497 | INFO     | servers.services.order:CreateOrder:25 - Received request is for create order: uuid='3b2b8bb5-f488-483d-a1f1-b2771fd84149' name='test' completed=False date='2025-12-22 12:23:22.447949Z'
+orders     | 2025-12-22 13:54:52.512 | SUCCESS  | servers.handlers.order:create_order:8 - Created order: [{'uuid': '3b2b8bb5-f488-483d-a1f1-b2771fd84149'}]
+orders     | 2025-12-22 13:54:52.512 | DEBUG    | servers.services.order:CreateOrder:29 - Result created order: notificationType='ORDER_NOTIFICATION_TYPE_ENUM_OK' order=OrderResponse(uuid='3b2b8bb5-f488-483d-a1f1-b2771fd84149', name=None, completed=False, date=None)
+```
 
 ## Обоснование
 
