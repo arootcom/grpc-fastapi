@@ -1,0 +1,63 @@
+@startuml
+
+'!theme plain
+'skinparam {
+'  shadowing false
+'  nodesep 50
+'  ranksep 100
+'  linetype ortho
+'}
+
+hide empty members
+allowmixing
+
+component curl <<client>> {
+}
+
+cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-multi.yaml docker-compose-multi]]" <<docker>> {
+    interface local_http as "http\nrest api\nport: 8080" <<interface>>
+    curl -(0- local_http
+
+
+    node gw as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/gw.py gw]]" <<container>> {
+        interface http as "http\nrest api\nport: 1111" <<interface>>
+        local_http #--# http
+
+
+        component api as "Fast API\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/api/order.py api.order]]" <<first process>> {
+        }
+        http --# api
+    }
+
+    node orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/orders.py Orders Service]]" <<container>> {
+        interface orders_grpc as "grpc\nport: 50091" <<interface>>
+        api -(0- orders_grpc
+
+        component srv_orders as "gRPC Server\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/orders.py servers.orders]]" <<asyncio process>> {
+            class orders as "Orders Service\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/order.py servers.services.order]]" <<service>>
+            orders_grpc --# orders
+        }
+    }
+
+    node reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/reserve.py Reserve Service]]" <<container>> {
+        interface reserve_grpc as "grpc\nport: 50091" <<interface>>
+        api -(0- reserve_grpc
+
+        component srv_reserve as "gRPC Server\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/reserve.py servers.reserve]]" <<asyncio process>> {
+        class reserve as "Reserve Service\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/reserve.py servers.services.reserve]]" <<service>>
+        reserve_grpc --# reserve
+        }
+    }
+
+    node loyalties as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/loyalties.py Loyalties Service]]" <<container>> {
+        interface loyalty_grpc as "grpc\nport: 50091" <<interface>>
+        api -(0- loyalty_grpc
+
+        component srv_loyalties as "gRPC Server\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/loyalties.py servers.loyalties]]" <<asyncio process>> {
+        class loyalty as "Loyalty Service\n[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/servers/services/loyalty.py servers.services.loyalty]]" <<service>>
+        loyalty_grpc --# loyalty
+        }
+    }
+}
+
+@enduml
