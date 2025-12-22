@@ -350,7 +350,7 @@ $ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'acc
 }
 ```
 
-А вот логи и порядок обработки поменялись
+А вот логи и адреса вызовов поменялись
 
 ![](./day1/sq-curl-multi.svg)
 

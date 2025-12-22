@@ -29,7 +29,7 @@ cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-com
         http --# api
     }
 
-    node orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/orders.py Orders Service]]" <<container>> {
+    node orders as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/orders.py orders]]" <<container>> {
         interface orders_grpc as "grpc\nport: 50091" <<interface>>
         api -(0- orders_grpc
 
@@ -39,7 +39,7 @@ cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-com
         }
     }
 
-    node reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/reserve.py Reserve Service]]" <<container>> {
+    node reserve as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/reserve.py reserve]]" <<container>> {
         interface reserve_grpc as "grpc\nport: 50091" <<interface>>
         api -(0- reserve_grpc
 
@@ -49,7 +49,7 @@ cloud docker as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/docker-com
         }
     }
 
-    node loyalties as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/loyalties.py Loyalties Service]]" <<container>> {
+    node loyalties as "[[https://github.com/arootcom/grpc-fastapi/blob/day1/app/loyalties.py loyalties]]" <<container>> {
         interface loyalty_grpc as "grpc\nport: 50091" <<interface>>
         api -(0- loyalty_grpc
 

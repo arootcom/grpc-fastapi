@@ -19,17 +19,17 @@ participant curl
 curl -> api : Создать заказ\n**POST** http://localhost:8080/order?name=test&completed=false
 activate api
 
-api -> reserve : Зыпрос на резервирование\n**gRPC** localhost:8787 protos.warehouse.ReserveService/ReserveItem
+api -> reserve : Зыпрос на резервирование\n**gRPC** reserve:50091 protos.warehouse.ReserveService/ReserveItem
 activate reserve
 reserve --> api : результат резервирования
 deactivate reserve
 
-api -> loyalty : Запрос информации о лояльности\n**gRPC** localhost:8787 protos.loyalties.LoyaltyService/LoyaltyInfo
+api -> loyalty : Запрос информации о лояльности\n**gRPC** loyalties:50091 protos.loyalties.LoyaltyService/LoyaltyInfo
 activate loyalty
 loyalty --> api : Данные о лояльности
 deactivate loyalty
 
-api -> orders : Создать заказ\n**gRPC** localhost:8787 protos.order.OrderService/CreateOrder
+api -> orders : Создать заказ\n**gRPC** orders:50091 protos.order.OrderService/CreateOrder
 activate orders
 orders --> api : Результат создания заказа
 deactivate orders
