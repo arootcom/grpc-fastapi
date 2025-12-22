@@ -140,6 +140,36 @@ from grpc_reflection.v1alpha import reflection
 
 ### Исследование прототипа
 
+1. Просмотр запущенных контейнеров
+
+```
+$ docker ps 
+CONTAINER ID   IMAGE          COMMAND            CREATED      STATUS      PORTS                                                                                        NAMES
+0064b53278c2   python3-grpc   "python main.py"   4 days ago   Up 3 days   0.0.0.0:8080->1111/tcp, [::]:8080->1111/tcp, 0.0.0.0:8787->50091/tcp, [::]:8787->50091/tcp   main
+
+```
+
+Видим один запущенный контейнер с именем (колонка NAMeS) main. Два порта определенные в контейнере проброщены на порты localhos, как показано на схеме выше. Порт 8080 принимает запросы по [http](https://ru.wikipedia.org/wiki/HTTP), а 8787 [gRPC](https://ru.wikipedia.org/wiki/GRPC)
+
+2. REST API запрос создания заказа
+
+```
+$ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accept: application/json'
+``` 
+
+Результат обработки запроса
+
+```
+{
+  "notificationType": "ORDER_NOTIFICATION_TYPE_ENUM_OK",
+  "order": {
+    "uuid": "9841d6f7-69df-4986-b837-65c386acb41d"
+  }
+}
+```
+
+
+
 
 ## Решение
 
