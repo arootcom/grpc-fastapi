@@ -309,10 +309,11 @@ gw         | INFO:     Application startup complete.
 
 По логам видим, что запустилось четыре контейнера, которые описаны в файле [docker-compose-multi.yaml](https://github.com/arootcom/grpc-fastapi/blob/day1/docker-compose-multi.yaml)
 Скрипты для запуска контейнеров размещены в директори проекта [app/](https://github.com/arootcom/grpc-fastapi/tree/day1/app/) и соответстствуют именанам контейнеров:
-    * [gw.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/gw.py)
-    * [loyalties.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/loyalties.py)
-    * [orders.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/orders.py)
-    * [reserve.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/reserve.py)
+
+* [gw.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/gw.py)
+* [loyalties.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/loyalties.py)
+* [orders.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/orders.py)
+* [reserve.py](https://github.com/arootcom/grpc-fastapi/blob/day1/app/reserve.py)
 
 ### Исследование измененного прототипа
 
