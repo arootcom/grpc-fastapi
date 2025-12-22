@@ -271,7 +271,7 @@ $ grpcurl -plaintext -d '{"name":"first"}' localhost:8787 protos.order.OrderServ
 
 ### Запуск измененного прототипа
 
-> [!IMPOTANT]
+> [!IMPORTANT]
 >
 > Выполнены условия:
 >
