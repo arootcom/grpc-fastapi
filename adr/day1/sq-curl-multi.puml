@@ -1,0 +1,40 @@
+@startuml
+
+autonumber
+
+box gw 
+    participant api as "Fast API"
+end box
+box "orders"
+    participant orders as "Orders Service"
+end box
+box "reserve"
+    participant reserve as "Reserve Service"
+end box
+box loyalties
+    participant loyalty as "Loyalties Service"
+end box
+participant curl
+
+curl -> api : Создать заказ\n**POST** http://localhost:8080/order?name=test&completed=false
+activate api
+
+api -> reserve : Зыпрос на резервирование\n**gRPC** localhost:8787 protos.warehouse.ReserveService/ReserveItem
+activate reserve
+reserve --> api : результат резервирования
+deactivate reserve
+
+api -> loyalty : Запрос информации о лояльности\n**gRPC** localhost:8787 protos.loyalties.LoyaltyService/LoyaltyInfo
+activate loyalty
+loyalty --> api : Данные о лояльности
+deactivate loyalty
+
+api -> orders : Создать заказ\n**gRPC** localhost:8787 protos.order.OrderService/CreateOrder
+activate orders
+orders --> api : Результат создания заказа
+deactivate orders
+
+api --> curl : Результат создания заказа
+deactivate api
+
+@enduml

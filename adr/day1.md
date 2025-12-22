@@ -317,6 +317,44 @@ gw         | INFO:     Application startup complete.
 
 ### Исследование измененного прототипа
 
+1. Просмотр запущенных контейнеров
+
+```
+$ docker ps 
+CONTAINER ID   IMAGE          COMMAND                 CREATED      STATUS             PORTS                                         NAMES
+bde2a383c5f7   python3-grpc   "python orders.py"      5 days ago   Up About an hour                                                 orders
+18a6bd24b3a4   python3-grpc   "python loyalties.py"   5 days ago   Up About an hour                                                 loyalties
+0e5972f9928e   python3-grpc   "python reserve.py"     5 days ago   Up About an hour                                                 reserve
+5dc86b298da5   python3-grpc   "python gw.py"          5 days ago   Up About an hour   0.0.0.0:8080->1111/tcp, [::]:8080->1111/tcp   gw
+```
+
+Видим четыре запущенных контейнера. Один порт определенный в контейнере gw проброщен на порт localhost, как показано на схеме выше. Порт 8080 принимает запросы по [http](https://ru.wikipedia.org/wiki/HTTP).
+
+2. REST API запрос создания заказа
+
+Используем для запроса утилиту командрой строки [curl](https://ru.wikipedia.org/wiki/CURL) 
+Сам запрос не поменялся.
+
+```
+$ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accept: application/json'
+``` 
+
+Результат обработки запроса
+
+```json
+{
+  "notificationType": "ORDER_NOTIFICATION_TYPE_ENUM_OK",
+  "order": {
+    "uuid": "9841d6f7-69df-4986-b837-65c386acb41d"
+  }
+}
+```
+
+А вот логи и порядок обработки поменялись
+
+![](./day1/sq-curl-multi.svg)
+
+
 ## Обоснование
 
 Принцип «Один микросервис — один контейнер» в микросервисной архитектуре обоснован необходимостью изоляции и переносимости микросервисов. Этот подход позволяет разрабатывать, тестировать и масштабировать компоненты по отдельности, а также обеспечивать согласованность между средой разработки, тестовой средой и производственной средой.
