@@ -149,9 +149,11 @@ CONTAINER ID   IMAGE          COMMAND            CREATED      STATUS      PORTS 
 
 ```
 
-Видим один запущенный контейнер с именем (колонка NAMeS) main. Два порта определенные в контейнере проброщены на порты localhos, как показано на схеме выше. Порт 8080 принимает запросы по [http](https://ru.wikipedia.org/wiki/HTTP), а 8787 [gRPC](https://ru.wikipedia.org/wiki/GRPC)
+Видим один запущенный контейнер с именем (колонка NAMeS) main. Два порта определенные в контейнере проброщены на порты localhost, как показано на схеме выше. Порт 8080 принимает запросы по [http](https://ru.wikipedia.org/wiki/HTTP), а 8787 по [gRPC](https://ru.wikipedia.org/wiki/GRPC)
 
 2. REST API запрос создания заказа
+
+Используем для запроса утилиту командрой строки [curl](https://ru.wikipedia.org/wiki/CURL) 
 
 ```
 $ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'accept: application/json'
@@ -168,6 +170,7 @@ $ curl -X 'POST' 'http://localhost:8080/order?name=test&completed=false' -H 'acc
 }
 ```
 
+![](./day1/sq-curl-singl.svg)
 
 
 
