@@ -11,15 +11,15 @@
 
 Текущая архитектура:
 
-    Микросервисы запускаются как отдельные процессы через [asyncio](https://docs.python.org/3/library/asyncio.html)
-    Все компоненты упакованы в один [контейнер](https://github.com/arootcom/grpc-fastapi/blob/main/docker-compose-singl.yaml)
+* Микросервисы запускаются как отдельные процессы через [asyncio](https://docs.python.org/3/library/asyncio.html)
+* Все компоненты упакованы в один [контейнер](https://github.com/arootcom/grpc-fastapi/blob/main/docker-compose-singl.yaml)
 
 Выявленные проблемы: Несмотря на независимость микросервисов, ошибка в одном сервисе может вызвать каскадный сбой в других. Это создает риски для:
 
-    ✗ Масштабируемости
-    ✗ Отказоустойчивости
-    ✗ Мониторинга
-    ✗ Безопасности
+✗ Масштабируемости
+✗ Отказоустойчивости
+✗ Мониторинга
+✗ Безопасности
 
 ![Component](./day1/deploy-singl.svg)
 
