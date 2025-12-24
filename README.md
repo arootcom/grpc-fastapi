@@ -60,6 +60,13 @@ $ grpcurl -plaintext -d '{"uuid":"5f23a419-3a68-4c6a-87a9-d14f9f021a64","quantit
 $ plantuml -tsvg filename.puml
 ```
 
+8. Конвертация md2pdf
+
+```
+$ sudo apt install pandoc texlive-xetex fonts-cmu
+$ pandoc --pdf-engine=xelatex -V mainfont="CMU Serif" -V monofont="CMU Typewriter Text" -V geometry:a4paper -V documentclass=article -o day1.pdf day1.md 
+```
+
 # Материалы
 
 * [gRPC ecample](https://github.com/0xN1ck/grpc_example/)
